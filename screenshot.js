@@ -8,12 +8,14 @@ var viewport = args[3].split("x");
 
 page.onLoadFinished = function(status) {
   if (status === 'success') {
-    page.evaluate(function() {});
-    page.render(output);
-    return phantom.exit();
+    setTimeout(function() {
+      page.render(output);
+      return phantom.exit();
+    }, 10000);
+
   } else {
     console.log('Connection failed.');
-    return phantom.exit();
+    phantom.exit();
   }
 };
 
