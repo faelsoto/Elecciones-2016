@@ -1,5 +1,6 @@
 task :parse do
   require 'csv'
+  require 'fileutils'
   require 'active_support/all'
 
   data = {}
@@ -33,5 +34,15 @@ task :parse do
     }
   end
 
-  puts data.inspect
+  data.each do |path, data|
+    path = path.split("/").map(&:parameterize).join("/")
+    FileUtils.mkdir_p path
+
+    data.each do |info|
+      ['1366x768', '320x568'].each do |viewport|
+        _path = "#{path}/#{"#{info[:partido]} #{info[:candidato]} #{viewport}".parameterize}.png"
+        system "phantomjs screenshot.js #{info[:url].inspect} #{_path.inspect} #{viewport}"
+      end
+    end
+  end
 end
